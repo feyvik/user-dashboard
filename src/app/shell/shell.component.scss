@@ -1,0 +1,16 @@
+main {
+  height: 100vh;
+  display: flex;
+}
+.main-content {
+  width: 100%;
+}
+.main-content.sidebar-active {
+  width: calc(100% - 200px);
+}
+
+.main-container {
+  height: 90vh;
+  padding: 10px 15px;
+  overflow-x: auto;
+}

@@ -1,0 +1,73 @@
+<main>
+  <h2>User Table</h2>
+  <div *ngIf="fetchUserData" class="main-container">
+    <div class="main-container__loader">
+      <i class="fa fa-spin fa-spinner"></i>
+    </div>
+  </div>
+  <div *ngIf="!fetchUserData">
+    <div *ngIf="totalPageCount !== 0" class="main-container">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let users of listUserData
+                  | paginate
+                    : {
+                        id: 'users',
+                        itemsPerPage: pageSize,
+                        currentPage: page,
+                        totalItems: totalPageCount
+                      };
+                let _index = index
+              "
+            >
+              <th scope="row">{{ _index + 1 }}</th>
+              <td>{{ users.name.firstname }} {{ users.name.lastname }}</td>
+              <td>{{ users.email }}</td>
+              <td></td>
+              <td>
+                <button
+                  (click)="editSelectedUserId(users.id)"
+                  type="button"
+                  class="btn-primary"
+                >
+                  Edit User
+                </button>
+                <button
+                  (click)="deleteUserById(users.id)"
+                  type="button"
+                  class="btn-danger"
+                >
+                  <i
+                    *ngIf="userDeletionInProgress(users.id)"
+                    class="fa fa-spin fa-spinner"
+                  ></i>
+                  Delete User
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="totalPageCount !== 0" class="has-text-centered">
+      <pagination-controls
+        id="users"
+        previousLabel="Prev"
+        nextLabel="Next"
+        (pageChange)="page = $event"
+      ></pagination-controls>
+    </div>
+  </div>
+</main>

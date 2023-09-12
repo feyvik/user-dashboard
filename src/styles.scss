@@ -1,0 +1,83 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  background: #eeeff4;
+  color: var(--textColor) !important;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+p {
+  margin: 0;
+}
+ul li {
+  list-style: none;
+}
+
+label {
+  color: #18191f;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+}
+
+button {
+  background: none;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.btn-danger {
+  background-color: rgb(200, 0, 0);
+  color: #ffffff;
+  padding: 16px 32px;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+  padding: 16px 32px;
+}
+
+.btn-primary-outline:hover {
+  background-color: #e9f3ff;
+  color: #2583f4;
+}
+
+input {
+  box-shadow: none !important;
+  outline: none !important;
+  width: 100%;
+  height: 26px;
+  border: 1px solid #cacaca;
+  border-radius: 4px;
+  padding: 0.4rem;
+}
+
+*::-webkit-scrollbar {
+  width: 2px;
+  height: 4px;
+  background-color: #fff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #515151;
+}
+
+.text-danger {
+  color: rgb(201, 4, 4);
+}
+
+input.is-invalid {
+  border-color: rgb(201, 4, 4);
+}
+
+@import "./base";

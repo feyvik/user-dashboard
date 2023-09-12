@@ -1,0 +1,46 @@
+aside {
+  width: 200px;
+  height: 100%;
+  background-color: var(--primary);
+  padding: 20px 14px;
+  box-sizing: border-box;
+  color: #ffffff;
+  overflow: hidden;
+  transition: width 0.75s ease;
+  cursor: pointer;
+  text-wrap: nowrap;
+}
+.dash-header {
+  h2 {
+    font-size: 20px;
+  }
+}
+.main-menu {
+  margin-top: 14px;
+}
+.navbar-nav {
+  height: 50vh;
+  margin: 0;
+  padding: 0;
+}
+.nav-item {
+  margin-bottom: 14px;
+}
+.nav-link {
+  padding: 10px 12px !important;
+}
+.nav-item.active a {
+  background: #ffffff;
+  border-radius: 10px;
+  color: var(--primary) !important;
+}
+a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+.material-symbols-outlined {
+  margin-right: 10px;
+}

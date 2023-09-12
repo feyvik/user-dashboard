@@ -1,0 +1,22 @@
+main {
+  min-height: 60vh;
+  .main-container {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    .main-container__loader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      .fa-spinner {
+        font-size: 30px;
+      }
+    }
+    .table-responsive {
+      display: block;
+      width: 100%;
+      overflow-x: auto !important;
+    }
+  }
+}

@@ -1,0 +1,303 @@
+<main>
+  <h2>User Form</h2>
+  <div class="main-container">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+          </div>
+          <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </div>
+        </div>
+      </div>
+      <div formGroupName="name" class="form-row">
+        <div class="form-group">
+          <label for="First Name">First Name</label>
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            formControlName="firstname"
+            [ngClass]="{
+              'is-invalid': submitted && user.name.controls.firstname.errors
+            }"
+          />
+          <div
+            class="text-danger mt-1"
+            *ngIf="submitted && user.name.controls.firstname.errors"
+          >
+            <p *ngIf="user.name.controls.firstname?.errors?.['required']">
+              First name is required.
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="Last Name">Last Name</label>
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            formControlName="lastname"
+            [ngClass]="{
+              'is-invalid': submitted && user.name.controls.lastname.errors
+            }"
+          />
+          <div
+            class="text-danger mt-1"
+            *ngIf="submitted && user.name.controls.lastname.errors"
+          >
+            <p *ngIf="user.name.controls.lastname?.errors?.['required']">
+              Last name is required.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="Email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            formControlName="email"
+            [ngClass]="{
+              'is-invalid': submitted && user.email.errors
+            }"
+          />
+          <div class="text-danger mt-1" *ngIf="submitted && user.email.errors">
+            <p *ngIf="user.email?.errors?.['required']">Email is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="User Name">User Name</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            formControlName="username"
+            [ngClass]="{
+              'is-invalid': submitted && user.username.errors
+            }"
+          />
+          <div
+            class="text-danger mt-1"
+            *ngIf="submitted && user.username.errors"
+          >
+            <p *ngIf="user.username?.errors?.['required']">
+              User name is required.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="Phone Number">Phone Number</label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            formControlName="phone"
+            [ngClass]="{
+              'is-invalid': submitted && user.phone.errors
+            }"
+          />
+          <div class="text-danger mt-1" *ngIf="submitted && user.phone.errors">
+            <p *ngIf="user.phone?.errors?.['required']">
+              Phone number is required.
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="Password">Password</label>
+          <div class="form-password">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              formControlName="password"
+              [ngClass]="{
+                'is-invalid': submitted && user.password.errors
+              }"
+            />
+            <i
+              class="fa fa-eye-slash"
+              id="toggleIconOpen"
+              (click)="toggleIcon()"
+            ></i>
+            <i
+              *ngIf="show"
+              class="fa fa-eye"
+              id="toggleIconClose"
+              (click)="toggleIcon()"
+            ></i>
+          </div>
+          <div
+            class="text-danger mt-1"
+            *ngIf="submitted && user.password.errors"
+          >
+            <p *ngIf="user.password?.errors?.['required']">
+              Password is required.
+            </p>
+            <p *ngIf="user.password.errors?.['pattern']">
+              Password must contain at least one number, one uppercase and a
+              lowercase letter and at least 8 characters<br />Password cannot
+              contain whitespace
+            </p>
+          </div>
+        </div>
+      </div>
+      <div formGroupName="address">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="City">City</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              formControlName="city"
+              [ngClass]="{
+                'is-invalid': submitted && user.address.controls.city.errors
+              }"
+            />
+            <div
+              class="text-danger mt-1"
+              *ngIf="submitted && user.address.controls.city.errors"
+            >
+              <p *ngIf="user.address.controls.city?.errors?.['required']">
+                City is required.
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Street">Street</label>
+            <input
+              type="text"
+              id="street"
+              name="street"
+              formControlName="street"
+              [ngClass]="{
+                'is-invalid': submitted && user.address.controls.street.errors
+              }"
+            />
+            <div
+              class="text-danger mt-1"
+              *ngIf="submitted && user.address.controls.street.errors"
+            >
+              <p *ngIf="user.address.controls.street?.errors?.['required']">
+                Street is required.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div formGroupName="geolocation" class="form-row">
+          <div class="form-group">
+            <label for="Lat">Lat</label>
+            <input
+              type="text"
+              id="lat"
+              name="lat"
+              formControlName="lat"
+              [ngClass]="{
+                'is-invalid':
+                  submitted &&
+                  user.address.controls.geolocation.controls.lat.errors
+              }"
+            />
+            <div
+              class="text-danger mt-1"
+              *ngIf="
+                submitted &&
+                user.address.controls.geolocation.controls.lat.errors
+              "
+            >
+              <p
+                *ngIf="user.address.controls.geolocation.controls.lat?.errors?.['required']"
+              >
+                Lat is required.
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="long">long</label>
+            <input
+              type="text"
+              id="long"
+              name="long"
+              formControlName="long"
+              [ngClass]="{
+                'is-invalid':
+                  submitted &&
+                  user.address.controls.geolocation.controls.long.errors
+              }"
+            />
+            <div
+              class="text-danger mt-1"
+              *ngIf="
+                submitted &&
+                user.address.controls.geolocation.controls.long.errors
+              "
+            >
+              <p
+                *ngIf="user.address.controls.geolocation.controls.long?.errors?.['required']"
+              >
+                long is required.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="Number">Number</label>
+            <input
+              type="text"
+              id="number"
+              name="number"
+              formControlName="number"
+              [ngClass]="{
+                'is-invalid': submitted && user.address.controls.number.errors
+              }"
+            />
+            <div
+              class="text-danger mt-1"
+              *ngIf="submitted && user.address.controls.number.errors"
+            >
+              <p *ngIf="user.address.controls.number?.errors?.['required']">
+                Number is required.
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Zip Code">Zip Code</label>
+            <input
+              type="text"
+              id="zipcode"
+              name="zipcode"
+              formControlName="zipcode"
+              [ngClass]="{
+                'is-invalid': submitted && user.address.controls.zipcode.errors
+              }"
+            />
+            <div
+              class="text-danger mt-1"
+              *ngIf="submitted && user.address.controls.zipcode.errors"
+            >
+              <p *ngIf="user.address.controls.zipcode?.errors?.['required']">
+                Zip Code is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <button type="submit" class="btn-primary">
+            <i *ngIf="showLoginProcessing" class="fa fa-spin fa-spinner"></i>
+            {{ isUserEdit ? "Update User" : " Add User" }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>

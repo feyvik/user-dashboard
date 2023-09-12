@@ -1,0 +1,45 @@
+main {
+  height: 100vh;
+}
+.main-container {
+  padding: 20px;
+  min-height: 60vh;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+.form-row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+.form-group {
+  width: 50%;
+  padding: 0 20px;
+}
+.fa {
+  margin: 0px 4px;
+}
+.form-password {
+  color: #18191f;
+  display: flex;
+  padding: 2px;
+  border: 1px solid rgb(190, 190, 190);
+  border-radius: 5px;
+  background: #eeeff4;
+  align-items: center;
+}
+
+.form-password input::placeholder {
+  color: #18191f;
+}
+
+.form-password input {
+  border: none;
+  margin: 0;
+  background: none;
+  font-size: 14px;
+  color: inherit;
+  border: none;
+  padding: 0.4rem;
+  height: 22px !important;
+}
