@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ServerRequestService } from '../services/server-request.service';
 import { ActivatedRoute } from '@angular/router';
+import { fadeInAnimation } from '../app.animation';
 
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.scss'],
+  animations: [fadeInAnimation],
 })
 export class AddUserComponent {
   userForm: any = FormGroup;
@@ -17,6 +19,7 @@ export class AddUserComponent {
   public show: boolean | null = null;
   public isUserEdit: boolean | null = null;
   public isUserId: number = 0;
+  public loadingResponse: boolean | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -114,6 +117,7 @@ export class AddUserComponent {
   }
 
   createNewUser(formData: string) {
+    this.showLoginProcessing = false;
     this.serverRequest.addUser(formData).subscribe({
       next: (response) => {
         this.showLoginProcessing = false;

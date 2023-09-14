@@ -18,16 +18,7 @@ const routes: Routes = [
         path: '',
         component: UserDashboardComponent,
       },
-    ],
-  },
-  {
-    path: 'add-user',
-    component: ShellComponent,
-    children: [
-      {
-        path: '',
-        component: AddUserComponent,
-      },
+      { path: 'add-user', component: AddUserComponent },
     ],
   },
 ];

@@ -4,11 +4,13 @@ import {
   IUserDTO,
 } from '../services/server-request.service';
 import { Router } from '@angular/router';
+import { fadeInAnimation } from '../app.animation';
 
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.scss'],
+  animations: [fadeInAnimation],
 })
 export class UserDashboardComponent {
   public listUserData: IUserDTO[] = [];
@@ -74,6 +76,6 @@ export class UserDashboardComponent {
 
   editSelectedUserId(userId: number): void {
     const queryParams = { userId };
-    this.router.navigate(['/add-user'], { queryParams });
+    this.router.navigate(['user-dashboard/add-user'], { queryParams });
   }
 }
