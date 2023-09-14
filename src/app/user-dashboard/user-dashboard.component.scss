@@ -19,4 +19,13 @@ main {
       overflow-x: auto !important;
     }
   }
+  .error-container {
+    padding: 20px;
+    text-align: center;
+    background: #ffffff;
+    height: 74vh;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
 }

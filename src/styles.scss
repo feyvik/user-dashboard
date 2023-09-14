@@ -81,3 +81,25 @@ input.is-invalid {
 }
 
 @import "./base";
+
+.error-message {
+  background: #ea545533 !important;
+  color: #ea5455 !important;
+  font-weight: 500;
+  position: relative;
+  padding: 0.71rem;
+  margin-bottom: 1rem;
+  border: 1px solid #0000;
+  border-radius: 0.5rem;
+}
+
+.success-message {
+  background: #d4edda;
+  color: #28a745;
+  font-weight: 500;
+  position: relative;
+  padding: 0.71rem;
+  margin-bottom: 1rem;
+  border: 1px solid #0000;
+  border-radius: 0.5rem;
+}

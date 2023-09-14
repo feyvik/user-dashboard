@@ -19,6 +19,8 @@ export class UserDashboardComponent {
   public totalPageCount: number = 0;
   public deletionInProcessUserId: number = 0;
   public fetchUserData: boolean = false;
+  public errorMessage: string | null = null;
+  public successMessage: string | null = null;
 
   constructor(
     private serverRequest: ServerRequestService,
@@ -30,6 +32,8 @@ export class UserDashboardComponent {
   }
 
   getListOfUser(): void {
+    this.errorMessage = null;
+
     this.fetchUserData = true;
     this.serverRequest.getUsers().subscribe({
       next: (response) => {
@@ -39,11 +43,13 @@ export class UserDashboardComponent {
       },
       error: (e) => {
         this.fetchUserData = false;
-        console.log(e);
+        this.errorMessage = e.errorMessage;
+        setInterval(() => {
+          this.errorMessage = null;
+        }, 4000);
       },
       complete: () => {
         this.fetchUserData = false;
-        console.info('complete');
       },
     });
   }
@@ -53,6 +59,9 @@ export class UserDashboardComponent {
   }
 
   deleteUserById(userId: number): void {
+    this.errorMessage = null;
+    this.successMessage = null;
+
     this.deletionInProcessUserId = userId;
     this.serverRequest.deleteUser(userId).subscribe({
       next: (response) => {
@@ -60,11 +69,18 @@ export class UserDashboardComponent {
         this.removeDeletedUserFromArray(response);
       },
       error: (e) => {
-        this.deletionInProcessUserId = userId;
-        console.log(e);
+        this.deletionInProcessUserId = 0;
+        this.errorMessage = e.errorMessage;
+        setInterval(() => {
+          this.errorMessage = null;
+        }, 4000);
       },
       complete: () => {
-        console.info('complete');
+        this.successMessage = 'User deleted successfully!';
+        this.deletionInProcessUserId = 0;
+        setInterval(() => {
+          this.successMessage = null;
+        }, 4000);
       },
     });
   }

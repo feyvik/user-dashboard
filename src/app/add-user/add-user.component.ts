@@ -11,9 +11,9 @@ import { fadeInAnimation } from '../app.animation';
   animations: [fadeInAnimation],
 })
 export class AddUserComponent {
-  userForm: any = FormGroup;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
+  public userForm: any = FormGroup;
+  public successMessage: string | null = null;
+  public errorMessage: string | null = null;
   public submitted: boolean | null = null;
   public showLoginProcessing: boolean | null = null;
   public show: boolean | null = null;
@@ -88,20 +88,24 @@ export class AddUserComponent {
   }
 
   getUserById(userId: number): void {
+    this.errorMessage = null;
+
     this.serverRequest.getUserById(userId).subscribe({
       next: (response) => {
         this.userForm.patchValue(response);
       },
       error: (e) => {
-        console.log(e);
-      },
-      complete: () => {
-        console.info('complete');
+        this.errorMessage = e.errorMessage;
+        setInterval(() => {
+          this.errorMessage = null;
+        }, 4000);
       },
     });
   }
 
   onSubmit(): void {
+    this.errorMessage = null;
+    this.successMessage = null;
     this.showLoginProcessing = true;
     this.submitted = true;
     if (this.userForm.invalid) {
@@ -117,18 +121,23 @@ export class AddUserComponent {
   }
 
   createNewUser(formData: string) {
-    this.showLoginProcessing = false;
     this.serverRequest.addUser(formData).subscribe({
       next: (response) => {
         this.showLoginProcessing = false;
       },
       error: (e) => {
         this.showLoginProcessing = false;
-        console.log(e);
+        this.errorMessage = e.errorMessage;
       },
       complete: () => {
         this.showLoginProcessing = false;
-        console.info('complete');
+        this.successMessage = 'User added successfully!';
+        setInterval(() => {
+          this.successMessage = null;
+          setInterval(() => {
+            this.errorMessage = null;
+          }, 4000);
+        }, 4000);
       },
     });
   }
@@ -140,11 +149,17 @@ export class AddUserComponent {
       },
       error: (e) => {
         this.showLoginProcessing = false;
-        console.log(e);
+        this.errorMessage = e.errorMessage;
+        setInterval(() => {
+          this.errorMessage = null;
+        }, 4000);
       },
       complete: () => {
         this.showLoginProcessing = false;
-        console.info('complete');
+        this.successMessage = 'User edited successfully!';
+        setInterval(() => {
+          this.successMessage = null;
+        }, 4000);
       },
     });
   }

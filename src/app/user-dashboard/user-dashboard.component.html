@@ -9,6 +9,14 @@
       </a>
     </div>
   </div>
+
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
   <div *ngIf="fetchUserData" class="main-container">
     <div class="main-container__loader">
       <i class="fa fa-spin fa-spinner"></i>
@@ -77,6 +85,15 @@
         nextLabel="Next"
         (pageChange)="page = $event"
       ></pagination-controls>
+    </div>
+    <div class="error-container" *ngIf="totalPageCount === 0">
+      <div style="width: 100%">
+        <img
+          src="../../assets/undraw_dreamer_re_9tua.svg"
+          alt="undraw_dreamer_re_9tua"
+          width="300px"
+        />
+      </div>
     </div>
   </div>
 </main>

@@ -1,5 +1,12 @@
 <main @myInsertRemoveTrigger>
   <h2>User Form</h2>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+
   <div class="main-container">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
