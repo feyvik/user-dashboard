@@ -22,6 +22,10 @@ export class UserDashboardComponent {
   public errorMessage: string | null = null;
   public successMessage: string | null = null;
 
+  filteredUsers: IUserDTO[] = []; // Initialize with all users
+
+  searchInput: string = '';
+
   constructor(
     private serverRequest: ServerRequestService,
     private router: Router
@@ -37,8 +41,9 @@ export class UserDashboardComponent {
     this.fetchUserData = true;
     this.serverRequest.getUsers().subscribe({
       next: (response) => {
-        this.fetchUserData = false;
         this.listUserData = response;
+        this.filteredUsers = [...this.listUserData];
+        this.fetchUserData = false;
         this.totalPageCount = response.length;
       },
       error: (e) => {
@@ -52,6 +57,26 @@ export class UserDashboardComponent {
         this.fetchUserData = false;
       },
     });
+  }
+
+  filterUsers() {
+    if (this.searchInput.trim().split(' ')[0] === '') {
+      this.filteredUsers = this.listUserData;
+    } else {
+      let te = this.searchInput.toLowerCase();
+      if (te.length >= 2) {
+        this.filteredUsers = this.listUserData.filter(
+          (user) =>
+            user.name.firstname.toLowerCase().includes(te) ||
+            user.name.lastname.toLowerCase().includes(te) ||
+            user.email.toLowerCase().includes(te)
+        );
+      }
+    }
+
+    this.filteredUsers.length === 0
+      ? (this.errorMessage = 'No User Record Found')
+      : (this.errorMessage = '');
   }
 
   userDeletionInProgress(userId: number): boolean {

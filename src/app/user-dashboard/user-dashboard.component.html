@@ -24,6 +24,14 @@
   </div>
   <div *ngIf="!fetchUserData">
     <div *ngIf="totalPageCount !== 0" class="main-container">
+      <div>
+        <input
+          type="text"
+          [(ngModel)]="searchInput"
+          (input)="filterUsers()"
+          placeholder="Search by name or email"
+        />
+      </div>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -38,7 +46,7 @@
           <tbody>
             <tr
               *ngFor="
-                let users of listUserData
+                let users of filteredUsers
                   | paginate
                     : {
                         id: 'users',
