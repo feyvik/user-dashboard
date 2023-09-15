@@ -59,7 +59,7 @@ export class UserDashboardComponent {
     });
   }
 
-  filterUsers() {
+  filterUsers(): void {
     if (this.searchInput.trim().split(' ')[0] === '') {
       this.filteredUsers = this.listUserData;
     } else {
