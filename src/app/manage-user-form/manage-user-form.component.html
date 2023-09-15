@@ -1,11 +1,5 @@
 <main @myInsertRemoveTrigger>
   <h2>User Form</h2>
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
-  <div *ngIf="successMessage" class="success-message">
-    {{ successMessage }}
-  </div>
 
   <div class="main-container">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
@@ -149,8 +143,9 @@
             </p>
             <p *ngIf="user.password.errors?.['pattern']">
               Password must contain at least one number, one uppercase and a
-              lowercase letter and at least 8 characters<br />Password cannot
-              contain whitespace
+              lowercase letter, one special character and at least 8 characters
+              <br />
+              Password cannot contain whitespace
             </p>
           </div>
         </div>
@@ -299,6 +294,13 @@
       </div>
       <div class="form-row">
         <div class="form-group">
+          <button
+            (click)="goToUserDasboard()"
+            type="reset"
+            class="btn-primary-outline"
+          >
+            Cancel
+          </button>
           <button type="submit" class="btn-primary">
             <i *ngIf="showLoginProcessing" class="fa fa-spin fa-spinner"></i>
             {{ isUserEdit ? "Update User" : " Add User" }}

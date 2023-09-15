@@ -11,110 +11,73 @@ export class ServerRequestService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<IUserDTO[]> {
-    return this.http.get<IUserDTO[]>(this.apiUrl).pipe(
-      catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
+  _handleHttpErrorResponse(error: HttpErrorResponse) {
+    let errorMessage = '';
 
-        if (error.status === 404) {
-          errorMessage = 'Resource not found';
-        } else if (error.status === 500) {
-          errorMessage = 'Internal server error';
-        } else {
-          errorMessage = `An error occurred: ${error.message}`;
-        }
-        // You can also re-throw the error to propagate it further up the chain
-        return throwError(() => ({
+    if (error.status === 404) {
+      errorMessage = 'Resource not found';
+    } else if (error.status === 500) {
+      errorMessage = 'Internal server error';
+    } else {
+      errorMessage = `An error occurred: ${error.message}`;
+    }
+
+    return throwError(
+      () =>
+        ({
           error,
           errorMessage,
-        }));
-      })
+        } as ICustomError)
     );
+  }
+
+  getUsers(): Observable<IUserDTO[]> {
+    return this.http
+      .get<IUserDTO[]>(this.apiUrl)
+      .pipe(catchError(this._handleHttpErrorResponse));
   }
 
   getUserById(userId: number): Observable<IUserDTO> {
-    return this.http.get<IUserDTO>(this.apiUrl + '/' + userId).pipe(
-      catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
-
-        if (error.status === 404) {
-          errorMessage = 'Resource not found';
-        } else if (error.status === 500) {
-          errorMessage = 'Internal server error';
-        } else {
-          errorMessage = `An error occurred: ${error.message}`;
-        }
-        // You can also re-throw the error to propagate it further up the chain
-        return throwError(() => ({
-          error,
-          errorMessage,
-        }));
-      })
-    );
+    return this.http
+      .get<IUserDTO>(this.apiUrl + '/' + userId)
+      .pipe(catchError(this._handleHttpErrorResponse));
   }
 
-  addUser(user: string): Observable<IUserDTO> {
-    return this.http.post<IUserDTO>(this.apiUrl, user).pipe(
-      catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
-
-        if (error.status === 404) {
-          errorMessage = 'Resource not found';
-        } else if (error.status === 500) {
-          errorMessage = 'Internal server error';
-        } else {
-          errorMessage = `An error occurred: ${error.message}`;
-        }
-        // You can also re-throw the error to propagate it further up the chain
-        return throwError(() => ({
-          error,
-          errorMessage,
-        }));
-      })
-    );
+  addUser(user: ISaveUserDTO): Observable<IUserDTO> {
+    return this.http
+      .post<IUserDTO>(this.apiUrl, JSON.stringify(user))
+      .pipe(catchError(this._handleHttpErrorResponse));
   }
 
-  editUser(user: string, isUserId: number): Observable<IUserDTO> {
-    return this.http.put<IUserDTO>(this.apiUrl + '/' + isUserId, user).pipe(
-      catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
-
-        if (error.status === 404) {
-          errorMessage = 'Resource not found';
-        } else if (error.status === 500) {
-          errorMessage = 'Internal server error';
-        } else {
-          errorMessage = `An error occurred: ${error.message}`;
-        }
-        // You can also re-throw the error to propagate it further up the chain
-        return throwError(() => ({
-          error,
-          errorMessage,
-        }));
-      })
-    );
+  editUser(id: number, user: ISaveUserDTO): Observable<IUserDTO> {
+    return this.http
+      .put<IUserDTO>(this.apiUrl + '/' + id, JSON.stringify(user))
+      .pipe(catchError(this._handleHttpErrorResponse));
   }
 
   deleteUser(userId: number): Observable<IUserDTO> {
-    return this.http.delete<IUserDTO>(this.apiUrl + '/' + userId).pipe(
-      catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
-
-        if (error.status === 404) {
-          errorMessage = 'Resource not found';
-        } else if (error.status === 500) {
-          errorMessage = 'Internal server error';
-        } else {
-          errorMessage = `An error occurred: ${error.message}`;
-        }
-        // You can also re-throw the error to propagate it further up the chain
-        return throwError(() => ({
-          error,
-          errorMessage,
-        }));
-      })
-    );
+    return this.http
+      .delete<IUserDTO>(this.apiUrl + '/' + userId)
+      .pipe(catchError(this._handleHttpErrorResponse));
   }
+}
+
+export interface IUserNameDTO {
+  firstname: string;
+  lastname: string;
+}
+
+export interface IUserAddressDTO {
+  city: string;
+  street: string;
+  number: number;
+  zipcode: string;
+  geolocation: IUserGeolocationDTO;
+}
+
+export interface IUserGeolocationDTO {
+  lat: string;
+  long: string;
 }
 
 export interface IUserDTO {
@@ -122,25 +85,14 @@ export interface IUserDTO {
   email: string;
   username: string;
   password: string;
-  name: Name;
-  address: Address;
+  name: IUserNameDTO;
+  address: IUserAddressDTO;
   phone: string;
 }
 
-export interface Name {
-  firstname: string;
-  lastname: string;
-}
+export interface ISaveUserDTO extends Omit<IUserDTO, 'id'> {}
 
-export interface Address {
-  city: string;
-  street: string;
-  number: number;
-  zipcode: string;
-  geolocation: Geolocation;
-}
-
-export interface Geolocation {
-  lat: string;
-  long: string;
+export interface ICustomError {
+  error: HttpErrorResponse;
+  errorMessage: string;
 }

@@ -1,16 +1,20 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ServerRequestService } from '../services/server-request.service';
-import { ActivatedRoute } from '@angular/router';
+import {
+  ICustomError,
+  ISaveUserDTO,
+  ServerRequestService,
+} from '../services/server-request.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fadeInAnimation } from '../app.animation';
 
 @Component({
-  selector: 'app-add-user',
-  templateUrl: './add-user.component.html',
-  styleUrls: ['./add-user.component.scss'],
+  selector: 'app-manage-user-form',
+  templateUrl: './manage-user-form.component.html',
+  styleUrls: ['./manage-user-form.component.scss'],
   animations: [fadeInAnimation],
 })
-export class AddUserComponent {
+export class ManageUserFormComponent {
   public userForm: any = FormGroup;
   public successMessage: string | null = null;
   public errorMessage: string | null = null;
@@ -18,13 +22,14 @@ export class AddUserComponent {
   public showLoginProcessing: boolean | null = null;
   public show: boolean | null = null;
   public isUserEdit: boolean | null = null;
-  public isUserId: number = 0;
+  public selectedUserId: number = 0;
   public loadingResponse: boolean | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private serverRequest: ServerRequestService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -58,10 +63,11 @@ export class AddUserComponent {
     });
 
     this.route.queryParams.subscribe((queryParams) => {
-      this.isUserId = queryParams['userId'];
-      if (this.isUserId !== undefined) {
+      this.selectedUserId = queryParams['userId'];
+
+      if (this.selectedUserId !== undefined) {
         this.isUserEdit = true;
-        this.getUserById(this.isUserId);
+        this.getUserById(this.selectedUserId);
       }
     });
   }
@@ -87,6 +93,23 @@ export class AddUserComponent {
     }
   }
 
+  private _handleObservableError(error: ICustomError) {
+    this.showLoginProcessing = false;
+    this.errorMessage = error.errorMessage;
+
+    setInterval(() => {
+      this.errorMessage = null;
+    }, 4000);
+  }
+
+  private _handleObservableComplete(msg: string) {
+    this.showLoginProcessing = false;
+    this.successMessage = msg;
+    setInterval(() => {
+      this.successMessage = null;
+    }, 4000);
+  }
+
   getUserById(userId: number): void {
     this.errorMessage = null;
 
@@ -94,12 +117,7 @@ export class AddUserComponent {
       next: (response) => {
         this.userForm.patchValue(response);
       },
-      error: (e) => {
-        this.errorMessage = e.errorMessage;
-        setInterval(() => {
-          this.errorMessage = null;
-        }, 4000);
-      },
+      error: this._handleObservableError,
     });
   }
 
@@ -108,59 +126,44 @@ export class AddUserComponent {
     this.successMessage = null;
     this.showLoginProcessing = true;
     this.submitted = true;
+
     if (this.userForm.invalid) {
       this.showLoginProcessing = false;
       return;
     }
-    const formData = JSON.stringify(this.userForm.value);
+
+    const formData = this.userForm.value as ISaveUserDTO;
+
     if (this.isUserEdit) {
-      this.editExitingUser(formData);
+      this.editExitingUser(this.selectedUserId, formData);
     } else {
       this.createNewUser(formData);
     }
   }
 
-  createNewUser(formData: string) {
-    this.serverRequest.addUser(formData).subscribe({
-      next: (response) => {
+  createNewUser(newUser: ISaveUserDTO) {
+    this.serverRequest.addUser(newUser).subscribe({
+      next: (_) => {
         this.showLoginProcessing = false;
       },
-      error: (e) => {
-        this.showLoginProcessing = false;
-        this.errorMessage = e.errorMessage;
-      },
-      complete: () => {
-        this.showLoginProcessing = false;
-        this.successMessage = 'User added successfully!';
-        setInterval(() => {
-          this.successMessage = null;
-          setInterval(() => {
-            this.errorMessage = null;
-          }, 4000);
-        }, 4000);
-      },
+      error: this._handleObservableError,
+      complete: () =>
+        this._handleObservableComplete('User added successfully!'),
     });
   }
 
-  editExitingUser(formData: string) {
-    this.serverRequest.editUser(formData, this.isUserId).subscribe({
-      next: (response) => {
+  editExitingUser(id: number, user: ISaveUserDTO) {
+    this.serverRequest.editUser(id, user).subscribe({
+      next: (_) => {
         this.showLoginProcessing = false;
       },
-      error: (e) => {
-        this.showLoginProcessing = false;
-        this.errorMessage = e.errorMessage;
-        setInterval(() => {
-          this.errorMessage = null;
-        }, 4000);
-      },
-      complete: () => {
-        this.showLoginProcessing = false;
-        this.successMessage = 'User edited successfully!';
-        setInterval(() => {
-          this.successMessage = null;
-        }, 4000);
-      },
+      error: this._handleObservableError,
+      complete: () =>
+        this._handleObservableComplete('User edited successfully!'),
     });
+  }
+
+  goToUserDasboard() {
+    this.router.navigate(['/user-dashboard']);
   }
 }

@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { ShellComponent } from './shell/shell.component';
 import { SideBarComponent } from './side-bar/side-bar.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
-import { AddUserComponent } from './add-user/add-user.component';
+import { ManageUserFormComponent } from './manage-user-form/manage-user-form.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import { AddUserComponent } from './add-user/add-user.component';
     ShellComponent,
     SideBarComponent,
     UserDashboardComponent,
-    AddUserComponent,
+    ManageUserFormComponent,
   ],
   imports: [
     BrowserModule,

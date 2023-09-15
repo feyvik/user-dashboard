@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { ShellComponent } from './shell/shell.component';
-import { AddUserComponent } from './add-user/add-user.component';
+import { ManageUserFormComponent } from './manage-user-form/manage-user-form.component';
 
 const routes: Routes = [
   {
@@ -18,7 +18,7 @@ const routes: Routes = [
         path: '',
         component: UserDashboardComponent,
       },
-      { path: 'add-user', component: AddUserComponent },
+      { path: 'add-user', component: ManageUserFormComponent },
     ],
   },
 ];

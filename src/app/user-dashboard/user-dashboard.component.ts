@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {
   ServerRequestService,
   IUserDTO,
+  ICustomError,
 } from '../services/server-request.service';
 import { Router } from '@angular/router';
 import { fadeInAnimation } from '../app.animation';
@@ -35,6 +36,22 @@ export class UserDashboardComponent {
     this.getListOfUser();
   }
 
+  private _handleObservableError(error: ICustomError) {
+    this.deletionInProcessUserId = 0;
+    this.errorMessage = error.errorMessage;
+    setInterval(() => {
+      this.errorMessage = null;
+    }, 4000);
+  }
+
+  private _handleObservableComplete(msg: string) {
+    this.deletionInProcessUserId = 0;
+    this.successMessage = msg;
+    setInterval(() => {
+      this.successMessage = null;
+    }, 4000);
+  }
+
   getListOfUser(): void {
     this.errorMessage = null;
 
@@ -46,13 +63,7 @@ export class UserDashboardComponent {
         this.fetchUserData = false;
         this.totalPageCount = response.length;
       },
-      error: (e) => {
-        this.fetchUserData = false;
-        this.errorMessage = e.errorMessage;
-        setInterval(() => {
-          this.errorMessage = null;
-        }, 4000);
-      },
+      error: this._handleObservableError,
       complete: () => {
         this.fetchUserData = false;
       },
@@ -63,7 +74,7 @@ export class UserDashboardComponent {
     if (this.searchInput.trim().split(' ')[0] === '') {
       this.filteredUsers = this.listUserData;
     } else {
-      let te = this.searchInput.toLowerCase();
+      const te = this.searchInput.toLowerCase();
       if (te.length >= 2) {
         this.filteredUsers = this.listUserData.filter(
           (user) =>
@@ -93,20 +104,9 @@ export class UserDashboardComponent {
         this.deletionInProcessUserId = 0;
         this.removeDeletedUserFromArray(response);
       },
-      error: (e) => {
-        this.deletionInProcessUserId = 0;
-        this.errorMessage = e.errorMessage;
-        setInterval(() => {
-          this.errorMessage = null;
-        }, 4000);
-      },
-      complete: () => {
-        this.successMessage = 'User deleted successfully!';
-        this.deletionInProcessUserId = 0;
-        setInterval(() => {
-          this.successMessage = null;
-        }, 4000);
-      },
+      error: this._handleObservableError,
+      complete: () =>
+        this._handleObservableComplete('User deleted successfully!'),
     });
   }
 
